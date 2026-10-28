@@ -1,0 +1,23 @@
+{
+    "name": "XTFrame.Runtime",
+    "rootNamespace": "XTFrame",
+    "references": [
+        "UnityEngine.UI",
+        "Unity.InputSystem"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": true,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [
+        {
+            "name": "com.unity.inputsystem",
+            "expression": "1.0.0",
+            "define": "XT_INPUT_SYSTEM"
+        }
+    ],
+    "noEngineReferences": false
+}

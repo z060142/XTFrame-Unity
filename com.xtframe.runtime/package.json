@@ -1,0 +1,26 @@
+{
+  "name": "com.xtframe.runtime",
+  "displayName": "XTFrame Runtime",
+  "version": "0.1.0",
+  "unity": "2021.3",
+  "description": "Runs XTFrame game UIs (HUDs, menus, screens) from a published bundle in StreamingAssets on a uGUI RawImage, through the XTFrame C ABI (software rendering, stage 1).",
+  "license": "MIT",
+  "author": {
+    "name": "XTFrame contributors"
+  },
+  "keywords": [
+    "ui",
+    "hud",
+    "xtframe"
+  ],
+  "dependencies": {
+    "com.unity.ugui": "1.0.0"
+  },
+  "samples": [
+    {
+      "displayName": "QuickStart",
+      "description": "One script that builds a Canvas, RawImage, XtSurfaceComponent and EventSystem at Play.",
+      "path": "Samples~/QuickStart"
+    }
+  ]
+}
