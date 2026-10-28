@@ -1,4 +1,4 @@
-// P/Invoke mirror of the XTFrame C ABI (xt/capi/xtframe.h, Docs/design/47-c-abi.md §47.3).
+// P/Invoke mirror of the XTFrame C ABI (xt/capi/xtframe.h, Docs/design/50-c-abi.md §50.3).
 // Every declaration here follows the header text one-to-one: same entry point names, same
 // parameter order, same field order and widths. Nothing in this file depends on UnityEngine.
 //
