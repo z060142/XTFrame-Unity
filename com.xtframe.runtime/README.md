@@ -36,7 +36,7 @@ input are off and a warning is logged once.
 
 ## Native library
 
-Build XTFrame (the `xt_capi` target, on by default with `XT_BUILD_CAPI`) and copy the library from
+Build XTFrame (the `xt_capi` target, with `-DXT_BUILD_CAPI=ON`: off by default, on in the `ninja-ci-release` preset) and copy the library from
 `bin/<platform>_<arch>/Release/` into the package:
 
 | Platform | File | Destination |
