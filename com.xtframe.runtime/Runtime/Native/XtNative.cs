@@ -387,6 +387,8 @@ namespace XTFrame
         public delegate void TimelineEventFn(IntPtr s, IntPtr e, IntPtr user);
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         public delegate void VisibilityFn(IntPtr s, int visible, IntPtr user);
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        public delegate void UpdateHookFn(IntPtr s, float dt, IntPtr user);
 
         // ---- library ----
         [DllImport(Lib, CallingConvention = CallingConvention.Cdecl, EntryPoint = "xt_capi_abi_version")]
@@ -561,6 +563,9 @@ namespace XTFrame
         public static extern XtStatus xt_surface_set_timeline_listener(IntPtr s, TimelineEventFn fn, IntPtr user);
         [DllImport(Lib, CallingConvention = CallingConvention.Cdecl, EntryPoint = "xt_surface_set_visibility_listener")]
         public static extern XtStatus xt_surface_set_visibility_listener(IntPtr s, VisibilityFn fn, IntPtr user);
+        // T-561 (50.3): called inside xt_surface_update, after input dispatch, before style resolution.
+        [DllImport(Lib, CallingConvention = CallingConvention.Cdecl, EntryPoint = "xt_surface_set_update_hook")]
+        public static extern XtStatus xt_surface_set_update_hook(IntPtr s, UpdateHookFn fn, IntPtr user);
 
         // ---- world anchor, perf ----
         [DllImport(Lib, CallingConvention = CallingConvention.Cdecl, EntryPoint = "xt_surface_set_world_anchor")]
