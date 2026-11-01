@@ -20,7 +20,7 @@ Either
   ```json
   {
     "dependencies": {
-      "com.xtframe.runtime": "file:../../XTFrame/Code/Hosts/Unity/com.xtframe.runtime"
+      "com.xtframe.runtime": "file:../../XTFrame-Unity/com.xtframe.runtime"
     }
   }
   ```

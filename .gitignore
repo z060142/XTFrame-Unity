@@ -1,0 +1,7 @@
+# Unity import artifacts and local scratch
+*.meta
+Library/
+Temp/
+Logs/
+obj/
+build/
