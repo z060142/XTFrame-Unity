@@ -22,6 +22,7 @@ and was moved here with `git subtree split`, history included.
 | 0.1.0 | XTFrame-Runtime `v0.13.0-code.2` | `XT_CAPI_ABI_VERSION` 1 |
 | 0.1.1 | XTFrame-Runtime `v0.13.1` | `XT_CAPI_ABI_VERSION` 1 |
 | 0.2.0 | XTFrame-Runtime `v0.14.0` (IR 3.0: bundles must be republished with 0.14 tools) | `XT_CAPI_ABI_VERSION` 1 |
+| 0.2.1 | XTFrame-Runtime `v0.14.0-code.1` (initial show now reaches the visibility listener) | `XT_CAPI_ABI_VERSION` 1 |
 
 ## Testing
 
