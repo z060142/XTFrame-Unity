@@ -20,6 +20,7 @@ and was moved here with `git subtree split`, history included.
 | Package | Runtime (submodule) | ABI |
 |---|---|---|
 | 0.1.0 | XTFrame-Runtime `v0.13.0-code.2` | `XT_CAPI_ABI_VERSION` 1 |
+| 0.1.1 | XTFrame-Runtime `v0.13.1` | `XT_CAPI_ABI_VERSION` 1 |
 
 ## Testing
 
