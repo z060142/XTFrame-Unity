@@ -26,6 +26,7 @@ and was moved here with `git subtree split`, history included.
 | 0.2.2 | XTFrame-Runtime `v0.14.0-code.2` (request_show outside an update notifies at the next update, lifecycle before OnShown) | `XT_CAPI_ABI_VERSION` 1 |
 | 0.3.0 | XTFrame-Runtime `v0.15.0` (source format v2; bundles unchanged, document ports named `document.<port>`) | `XT_CAPI_ABI_VERSION` 1 |
 | 0.3.1 | XTFrame-Runtime `v0.15.0-code.1` (bundle string tables load on open; set_language re-resolves `@key` and posts `languageChanged` itself) | `XT_CAPI_ABI_VERSION` 1 |
+| 0.3.2 | XTFrame-Runtime `v0.15.1` (`spec.defaultLanguage` in the manifest; `<repeat>` template svg/@key fixes; importer fixes; no ABI or bundle change) | `XT_CAPI_ABI_VERSION` 1 |
 
 ## Testing
 
