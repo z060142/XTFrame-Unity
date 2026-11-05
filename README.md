@@ -24,6 +24,7 @@ and was moved here with `git subtree split`, history included.
 | 0.2.0 | XTFrame-Runtime `v0.14.0` (IR 3.0: bundles must be republished with 0.14 tools) | `XT_CAPI_ABI_VERSION` 1 |
 | 0.2.1 | XTFrame-Runtime `v0.14.0-code.1` (initial show now reaches the visibility listener) | `XT_CAPI_ABI_VERSION` 1 |
 | 0.2.2 | XTFrame-Runtime `v0.14.0-code.2` (request_show outside an update notifies at the next update, lifecycle before OnShown) | `XT_CAPI_ABI_VERSION` 1 |
+| 0.3.0 | XTFrame-Runtime `v0.15.0` (source format v2; bundles unchanged, document ports named `document.<port>`) | `XT_CAPI_ABI_VERSION` 1 |
 
 ## Testing
 
