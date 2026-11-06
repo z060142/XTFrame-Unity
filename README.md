@@ -9,7 +9,7 @@ a pure C# UPM package that runs published XTFrame UI bundles through the XTFrame
   and QuickStart steps).
 - Runtime sources the package is built against: the `runtime/` submodule (the public XTFrame runtime
   mirror, pinned to a release tag). Build `xtframe.dll` / `libxtframe.so` / `libxtframe.dylib` from
-  it with `-DXT_BUILD_CAPI=ON` and copy the library into `com.xtframe.runtime/Runtime/Plugins/<platform>/`.
+  it with `-DXT_BUILD_CAPI=ON` and copy the library into `com.xtframe.runtime/Runtime/Plugins/<platform>/`. Also copy `wgpu_native.dll` / `libwgpu_native.so` / `libwgpu_native.dylib` from the same `bin/` folder next to it (needed by `xt_gpu_target_*`; without it the GPU target fails to create and the software path still works).
 - Unity: 2021.3 or newer. Windows, macOS and Linux editor and standalone players (stage 1).
 
 History: the package lived in the XTFrame main repository under `Code/Hosts/Unity/` until 2026-11-01
@@ -28,6 +28,7 @@ and was moved here with `git subtree split`, history included.
 | 0.3.1 | XTFrame-Runtime `v0.15.0-code.1` (bundle string tables load on open; set_language re-resolves `@key` and posts `languageChanged` itself) | `XT_CAPI_ABI_VERSION` 1 |
 | 0.3.2 | XTFrame-Runtime `v0.15.1` (`spec.defaultLanguage` in the manifest; `<repeat>` template svg/@key fixes; importer fixes; no ABI or bundle change) | `XT_CAPI_ABI_VERSION` 1 |
 | 0.3.3 | XTFrame-Runtime `v0.15.1-code.1` (xt_surface_save_state / xt_surface_load_state externs) | `XT_CAPI_ABI_VERSION` 1 |
+| 0.3.4 | XTFrame-Runtime `v0.15.1-code.2` (GPU target: xt_gpu_target_*, xt_surface_render_gpu; wgpu_native ships beside xtframe) | `XT_CAPI_ABI_VERSION` 1 |
 
 ## Testing
 

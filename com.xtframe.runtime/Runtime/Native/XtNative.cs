@@ -32,6 +32,8 @@ namespace XTFrame
         Internal = 7,
         /// <summary>Incompatible data or ABI version.</summary>
         Incompatible = 8,
+        /// <summary>Still in use (xt_gpu_target_destroy with surfaces attached).</summary>
+        Busy = 9,
     }
 
     /// <summary>Input event kinds (xt_input_kind; values equal InputEvent::Kind order).</summary>
@@ -273,6 +275,39 @@ namespace XTFrame
         public byte gesture;
         public byte direction;
         public float gesture_scale;
+    }
+
+    /// <summary>xt_window_kind (T-636).</summary>
+    public enum XtWindowKind
+    {
+        None = 0,
+        Win32 = 1,
+        Cocoa = 2,
+        X11 = 3,
+        Wayland = 4,
+    }
+
+    /// <summary>xt_native_window (64-bit layout: kind at 0, union at 8, size 24).</summary>
+    [StructLayout(LayoutKind.Explicit, Size = 24)]
+    internal struct XtNativeWindow
+    {
+        [FieldOffset(0)] public int kind;
+        /// <summary>hwnd | ns_window | x11 Display* | wl_display*</summary>
+        [FieldOffset(8)] public IntPtr handle0;
+        /// <summary>x11 Window (uint64) | wl_surface*</summary>
+        [FieldOffset(16)] public IntPtr handle1;
+    }
+
+    /// <summary>xt_gpu_target_desc. struct_size = Marshal.SizeOf&lt;XtGpuTargetDesc&gt;() (56 on 64-bit); backend is a UTF-8 string pointer or IntPtr.Zero.</summary>
+    [StructLayout(LayoutKind.Sequential)]
+    internal struct XtGpuTargetDesc
+    {
+        public uint struct_size;
+        public XtNativeWindow window;
+        public int width;
+        public int height;
+        public int vsync;
+        public IntPtr backend;
     }
 
     /// <summary>xt_rect (device pixels, top-left origin).</summary>
@@ -571,6 +606,28 @@ namespace XTFrame
         public static extern IntPtr xt_surface_save_state(IntPtr s);
         [DllImport(Lib, CallingConvention = CallingConvention.Cdecl, EntryPoint = "xt_surface_load_state")]
         public static extern XtStatus xt_surface_load_state(IntPtr s, [MarshalAs(UnmanagedType.LPUTF8Str)] string json);
+
+        // T-636 (50.z): GPU target; wgpu_native must sit next to xtframe in Plugins
+        [DllImport(Lib, CallingConvention = CallingConvention.Cdecl, EntryPoint = "xt_gpu_target_create")]
+        public static extern IntPtr xt_gpu_target_create(ref XtGpuTargetDesc desc);
+        [DllImport(Lib, CallingConvention = CallingConvention.Cdecl, EntryPoint = "xt_gpu_target_destroy")]
+        public static extern XtStatus xt_gpu_target_destroy(IntPtr t);
+        [DllImport(Lib, CallingConvention = CallingConvention.Cdecl, EntryPoint = "xt_gpu_target_resize")]
+        public static extern XtStatus xt_gpu_target_resize(IntPtr t, int width, int height);
+        /// <param name="clearRgba">4 floats, straight alpha 0..1; null = transparent.</param>
+        [DllImport(Lib, CallingConvention = CallingConvention.Cdecl, EntryPoint = "xt_gpu_target_begin_frame")]
+        public static extern XtStatus xt_gpu_target_begin_frame(IntPtr t, float[] clearRgba);
+        [DllImport(Lib, CallingConvention = CallingConvention.Cdecl, EntryPoint = "xt_gpu_target_end_frame")]
+        public static extern XtStatus xt_gpu_target_end_frame(IntPtr t);
+        [DllImport(Lib, CallingConvention = CallingConvention.Cdecl, EntryPoint = "xt_gpu_target_readback")]
+        public static extern XtStatus xt_gpu_target_readback(IntPtr t, IntPtr rgba, int stride);
+        [DllImport(Lib, CallingConvention = CallingConvention.Cdecl, EntryPoint = "xt_surface_render_gpu")]
+        public static extern XtStatus xt_surface_render_gpu(IntPtr s, IntPtr t, ref XtRect dest);
+        /// <summary>xt_surface_render_gpu with dest = NULL (the whole target).</summary>
+        [DllImport(Lib, CallingConvention = CallingConvention.Cdecl, EntryPoint = "xt_surface_render_gpu")]
+        public static extern XtStatus xt_surface_render_gpu_full(IntPtr s, IntPtr t, IntPtr destNull);
+        [DllImport(Lib, CallingConvention = CallingConvention.Cdecl, EntryPoint = "xt_surface_detach_gpu")]
+        public static extern XtStatus xt_surface_detach_gpu(IntPtr s);
 
         // ---- world anchor, perf ----
         [DllImport(Lib, CallingConvention = CallingConvention.Cdecl, EntryPoint = "xt_surface_set_world_anchor")]
