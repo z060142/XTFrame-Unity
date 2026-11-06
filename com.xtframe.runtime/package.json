@@ -1,7 +1,7 @@
 {
   "name": "com.xtframe.runtime",
   "displayName": "XTFrame Runtime",
-  "version": "0.3.4",
+  "version": "0.3.5",
   "unity": "2021.3",
   "description": "Runs XTFrame game UIs (HUDs, menus, screens) from a published bundle in StreamingAssets on a uGUI RawImage, through the XTFrame C ABI (software rendering, stage 1).",
   "license": "MIT",

@@ -628,6 +628,11 @@ namespace XTFrame
         public static extern XtStatus xt_surface_render_gpu_full(IntPtr s, IntPtr t, IntPtr destNull);
         [DllImport(Lib, CallingConvention = CallingConvention.Cdecl, EntryPoint = "xt_surface_detach_gpu")]
         public static extern XtStatus xt_surface_detach_gpu(IntPtr s);
+        // T-641 (50.aa): hidden surfaces release their render scratch by default; set_trim_on_hide(s, 0) keeps it. trim is callback-safe.
+        [DllImport(Lib, CallingConvention = CallingConvention.Cdecl, EntryPoint = "xt_surface_trim")]
+        public static extern XtStatus xt_surface_trim(IntPtr s);
+        [DllImport(Lib, CallingConvention = CallingConvention.Cdecl, EntryPoint = "xt_surface_set_trim_on_hide")]
+        public static extern XtStatus xt_surface_set_trim_on_hide(IntPtr s, int enabled);
 
         // ---- world anchor, perf ----
         [DllImport(Lib, CallingConvention = CallingConvention.Cdecl, EntryPoint = "xt_surface_set_world_anchor")]
