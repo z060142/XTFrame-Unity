@@ -30,6 +30,7 @@ and was moved here with `git subtree split`, history included.
 | 0.3.3 | XTFrame-Runtime `v0.15.1-code.1` (xt_surface_save_state / xt_surface_load_state externs) | `XT_CAPI_ABI_VERSION` 1 |
 | 0.3.4 | XTFrame-Runtime `v0.15.1-code.2` (GPU target: xt_gpu_target_*, xt_surface_render_gpu; wgpu_native ships beside xtframe) | `XT_CAPI_ABI_VERSION` 1 |
 | 0.3.5 | XTFrame-Runtime `v0.15.1-code.3` (hidden surfaces release render scratch; xt_surface_trim / xt_surface_set_trim_on_hide) | `XT_CAPI_ABI_VERSION` 1 |
+| 0.3.6 | XTFrame-Runtime `v0.15.1-code.4` (sample_count on the GPU target; damage-aware SW partial redraw, SIMD compositing, per-target shared GPU textures/pipelines) | `XT_CAPI_ABI_VERSION` 1 |
 
 ## Testing
 

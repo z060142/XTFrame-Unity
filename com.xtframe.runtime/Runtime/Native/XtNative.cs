@@ -298,7 +298,7 @@ namespace XTFrame
         [FieldOffset(16)] public IntPtr handle1;
     }
 
-    /// <summary>xt_gpu_target_desc. struct_size = Marshal.SizeOf&lt;XtGpuTargetDesc&gt;() (56 on 64-bit); backend is a UTF-8 string pointer or IntPtr.Zero.</summary>
+    /// <summary>xt_gpu_target_desc. struct_size = Marshal.SizeOf&lt;XtGpuTargetDesc&gt;() (64 on 64-bit); backend is a UTF-8 string pointer or IntPtr.Zero.</summary>
     [StructLayout(LayoutKind.Sequential)]
     internal struct XtGpuTargetDesc
     {
@@ -308,6 +308,7 @@ namespace XTFrame
         public int height;
         public int vsync;
         public IntPtr backend;
+        public int sample_count; // T-647 (50.z): 0 = 4x MSAA (default), 1 = none, 4; read only when struct_size covers it (Marshal.SizeOf = 64 on x64)
     }
 
     /// <summary>xt_rect (device pixels, top-left origin).</summary>
