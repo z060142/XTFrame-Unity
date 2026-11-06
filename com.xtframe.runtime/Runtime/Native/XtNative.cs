@@ -566,6 +566,11 @@ namespace XTFrame
         // T-561 (50.3): called inside xt_surface_update, after input dispatch, before style resolution.
         [DllImport(Lib, CallingConvention = CallingConvention.Cdecl, EntryPoint = "xt_surface_set_update_hook")]
         public static extern XtStatus xt_surface_set_update_hook(IntPtr s, UpdateHookFn fn, IntPtr user);
+        // T-635 (50.y): returned pointer is owned by the surface and valid until the next save_state or destroy; read it immediately.
+        [DllImport(Lib, CallingConvention = CallingConvention.Cdecl, EntryPoint = "xt_surface_save_state")]
+        public static extern IntPtr xt_surface_save_state(IntPtr s);
+        [DllImport(Lib, CallingConvention = CallingConvention.Cdecl, EntryPoint = "xt_surface_load_state")]
+        public static extern XtStatus xt_surface_load_state(IntPtr s, [MarshalAs(UnmanagedType.LPUTF8Str)] string json);
 
         // ---- world anchor, perf ----
         [DllImport(Lib, CallingConvention = CallingConvention.Cdecl, EntryPoint = "xt_surface_set_world_anchor")]
