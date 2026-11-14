@@ -36,14 +36,29 @@ input are off and a warning is logged once.
 
 ## Native library
 
-Build XTFrame (the `xt_capi` target, with `-DXT_BUILD_CAPI=ON`: off by default, on in the `ninja-ci-release` preset) and copy the library from
-`bin/<platform>_<arch>/Release/` into the package:
+Build the `xt_capi` target from [XTFrame-Backends](https://github.com/shereware/XTFrame-Backends)
+(the `backends/` submodule of the XTFrame-Unity repository; its presets turn on `XT_BUILD_CAPI`), e.g.
+on Windows:
 
-| Platform | File | Destination |
+```
+git submodule update --init --recursive
+cd backends
+cmake --preset vs2022
+cmake --build --preset vs2022-release --target xt_capi
+```
+
+and copy the library, with wgpu-native's shared library next to it, from
+`backends/bin/<platform>_<arch>/Release/` into the package (the XTFrame-Runtime mirror alone builds a
+library without the GPU target):
+
+| Platform | Files | Destination |
 |---|---|---|
-| Windows x86_64 | `xtframe.dll` | `Runtime/Plugins/x86_64/` |
-| Linux x86_64 | `libxtframe.so` | `Runtime/Plugins/x86_64/` |
-| macOS | `libxtframe.dylib` | `Runtime/Plugins/macOS/` |
+| Windows x86_64 | `xtframe.dll`, `wgpu_native.dll` | `Runtime/Plugins/x86_64/` |
+| Linux x86_64 | `libxtframe.so`, `libwgpu_native.so` | `Runtime/Plugins/x86_64/` |
+| macOS | `libxtframe.dylib`, `libwgpu_native.dylib` | `Runtime/Plugins/macOS/` |
+
+On Windows `wgpu_native.dll` is the prebuilt pinned by XTFrame-Backends (with memory hints); the
+first configure downloads and hash-checks it.
 
 After Unity imports the file, select it and, in the Inspector's plugin settings, tick the matching
 platform (Standalone with the right OS and CPU) and **Editor**, then press *Apply*. The `.meta` files

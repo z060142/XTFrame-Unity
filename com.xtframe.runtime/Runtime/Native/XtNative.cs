@@ -308,7 +308,23 @@ namespace XTFrame
         public int height;
         public int vsync;
         public IntPtr backend;
-        public int sample_count; // T-647 (50.z): 0 = 4x MSAA (default), 1 = none, 4; read only when struct_size covers it (Marshal.SizeOf = 64 on x64)
+        public int sample_count; // T-647 (50.z): 0 = 1x (the default since v0.16.0, T-666; it was 4x before), 1 = none, 4 = 4x MSAA; read only when struct_size covers it (Marshal.SizeOf = 64 on x64)
+    }
+
+    /// <summary>xt_gpu_memory_stats (T-656, 50.ab). struct_size = Marshal.SizeOf&lt;XtGpuMemoryStats&gt;() (64), set by the caller; the library writes only the fields it covers.</summary>
+    [StructLayout(LayoutKind.Sequential)]
+    internal struct XtGpuMemoryStats
+    {
+        public uint struct_size;
+        public uint image_textures;
+        public ulong image_bytes;
+        public uint image_idle_textures;
+        public uint attached_surfaces;
+        public ulong image_idle_bytes;
+        public ulong image_evictions;
+        public ulong surface_bytes;
+        public ulong transient_bytes;
+        public ulong atlas_bytes;
     }
 
     /// <summary>xt_rect (device pixels, top-left origin).</summary>
@@ -634,6 +650,21 @@ namespace XTFrame
         public static extern XtStatus xt_surface_trim(IntPtr s);
         [DllImport(Lib, CallingConvention = CallingConvention.Cdecl, EntryPoint = "xt_surface_set_trim_on_hide")]
         public static extern XtStatus xt_surface_set_trim_on_hide(IntPtr s, int enabled);
+        // T-656 (50.ab): shared image textures of a target; idle budget (default 64 MiB, 0 = destroy when unused), trim (not inside a frame), counters.
+        [DllImport(Lib, CallingConvention = CallingConvention.Cdecl, EntryPoint = "xt_gpu_target_set_image_budget")]
+        public static extern XtStatus xt_gpu_target_set_image_budget(IntPtr t, ulong idleBytes);
+        [DllImport(Lib, CallingConvention = CallingConvention.Cdecl, EntryPoint = "xt_gpu_target_trim")]
+        public static extern XtStatus xt_gpu_target_trim(IntPtr t);
+        [DllImport(Lib, CallingConvention = CallingConvention.Cdecl, EntryPoint = "xt_gpu_target_memory_stats")]
+        public static extern XtStatus xt_gpu_target_memory_stats(IntPtr t, ref XtGpuMemoryStats stats);
+        // T-688 (50.ae): synchronous image preload into the target's shared cache; loaded = textures newly uploaded.
+        [DllImport(Lib, CallingConvention = CallingConvention.Cdecl, EntryPoint = "xt_gpu_target_preload_ui")]
+        public static extern XtStatus xt_gpu_target_preload_ui(IntPtr t, IntPtr b, [MarshalAs(UnmanagedType.LPUTF8Str)] string uiId,
+                                                               out uint loaded);
+        [DllImport(Lib, CallingConvention = CallingConvention.Cdecl, EntryPoint = "xt_gpu_target_preload_image")]
+        public static extern XtStatus xt_gpu_target_preload_image(IntPtr t, IntPtr b,
+                                                                  [MarshalAs(UnmanagedType.LPUTF8Str)] string asset,
+                                                                  out uint loaded);
 
         // ---- world anchor, perf ----
         [DllImport(Lib, CallingConvention = CallingConvention.Cdecl, EntryPoint = "xt_surface_set_world_anchor")]
