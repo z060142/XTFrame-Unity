@@ -2,6 +2,21 @@
 
 All notable changes to `com.xtframe.runtime` are documented here.
 
+## [0.5.0] - 2026-11-18
+
+### Changed
+- The native library is now built from XTFrame-Backends `v0.18.0` (`backends/runtime/` =
+  XTFrame-Runtime `v0.18.0`). Re-fetch the submodules (`git submodule sync --recursive`, then
+  `git submodule update --init --recursive`) and rebuild as described for 0.4.0.
+
+### Added
+- `XtNative` declarations for the XTFrame 0.18 world-layer C ABI additions (ABI version still 1,
+  T-709, 50.af): `xt_surface_set_world_layers`, `xt_surface_set_world_layer_density`,
+  `xt_surface_render_layers_gpu`, `xt_surface_world_layer_count`, `xt_surface_world_layer_info` with
+  `XtWorldLayer` (`xt_world_layer`), `xt_surface_world_layer_readback`, `xt_surface_draw_layers_gpu`
+  (and `xt_surface_draw_layers_gpu_full` for dest = NULL), `xt_world_layer_orbit_matrix`,
+  `xt_world_layer_unproject`, `xt_surface_push_input_ray`. No high-level C# API yet.
+
 ## [0.4.0] - 2026-11-14
 
 ### Changed

@@ -327,6 +327,26 @@ namespace XTFrame
         public ulong atlas_bytes;
     }
 
+    /// <summary>xt_world_layer (T-709, 50.af). struct_size = Marshal.SizeOf&lt;XtWorldLayer&gt;() (108), set by the caller; the library writes only the fields it covers. world3 is row-major (m[row * 4 + col]), rect is x, y, w, h.</summary>
+    [StructLayout(LayoutKind.Sequential)]
+    internal struct XtWorldLayer
+    {
+        public uint struct_size;
+        public uint id;
+        public uint order;
+        public uint tex_width;
+        public uint tex_height;
+        /// <summary>16 floats, row-major: layer plane to root box.</summary>
+        public unsafe fixed float world3[16];
+        /// <summary>4 floats: x, y, w, h on the layer plane (logical px).</summary>
+        public unsafe fixed float rect[4];
+        public float opacity;
+        public byte backface_hidden;
+        public byte changed;
+        public byte _pad0;
+        public byte _pad1;
+    }
+
     /// <summary>xt_rect (device pixels, top-left origin).</summary>
     [StructLayout(LayoutKind.Sequential)]
     internal struct XtRect
@@ -665,6 +685,38 @@ namespace XTFrame
         public static extern XtStatus xt_gpu_target_preload_image(IntPtr t, IntPtr b,
                                                                   [MarshalAs(UnmanagedType.LPUTF8Str)] string asset,
                                                                   out uint loaded);
+
+        // T-709 (50.af): world-layer output. Every function returns Unsupported (count 0) in a build without wgpu, except orbit_matrix and unproject (pure math).
+        // Float arrays: boxToDest / outMatrix are 16 floats, origin / direction are 3 floats.
+        [DllImport(Lib, CallingConvention = CallingConvention.Cdecl, EntryPoint = "xt_surface_set_world_layers")]
+        public static extern XtStatus xt_surface_set_world_layers(IntPtr s, int enabled);
+        [DllImport(Lib, CallingConvention = CallingConvention.Cdecl, EntryPoint = "xt_surface_set_world_layer_density")]
+        public static extern XtStatus xt_surface_set_world_layer_density(IntPtr s, float density);
+        [DllImport(Lib, CallingConvention = CallingConvention.Cdecl, EntryPoint = "xt_surface_render_layers_gpu")]
+        public static extern XtStatus xt_surface_render_layers_gpu(IntPtr s, IntPtr t);
+        [DllImport(Lib, CallingConvention = CallingConvention.Cdecl, EntryPoint = "xt_surface_world_layer_count")]
+        public static extern uint xt_surface_world_layer_count(IntPtr s);
+        [DllImport(Lib, CallingConvention = CallingConvention.Cdecl, EntryPoint = "xt_surface_world_layer_info")]
+        public static extern XtStatus xt_surface_world_layer_info(IntPtr s, uint index, ref XtWorldLayer layer);
+        /// <param name="rgba">tex_width x tex_height RGBA8, premultiplied alpha; stride &gt;= tex_width * 4.</param>
+        [DllImport(Lib, CallingConvention = CallingConvention.Cdecl, EntryPoint = "xt_surface_world_layer_readback")]
+        public static extern XtStatus xt_surface_world_layer_readback(IntPtr s, uint index, IntPtr rgba, int stride);
+        [DllImport(Lib, CallingConvention = CallingConvention.Cdecl, EntryPoint = "xt_surface_draw_layers_gpu")]
+        public static extern XtStatus xt_surface_draw_layers_gpu(IntPtr s, IntPtr t, ref XtRect dest, float[] boxToDest,
+                                                                 float depthScale);
+        /// <summary>xt_surface_draw_layers_gpu with dest = NULL (the whole target).</summary>
+        [DllImport(Lib, CallingConvention = CallingConvention.Cdecl, EntryPoint = "xt_surface_draw_layers_gpu")]
+        public static extern XtStatus xt_surface_draw_layers_gpu_full(IntPtr s, IntPtr t, IntPtr destNull,
+                                                                      float[] boxToDest, float depthScale);
+        [DllImport(Lib, CallingConvention = CallingConvention.Cdecl, EntryPoint = "xt_world_layer_orbit_matrix")]
+        public static extern XtStatus xt_world_layer_orbit_matrix(float[] outMatrix, float boxW, float boxH, float destW,
+                                                                  float destH, float yawDeg, float pitchDeg, float fovDeg);
+        [DllImport(Lib, CallingConvention = CallingConvention.Cdecl, EntryPoint = "xt_world_layer_unproject")]
+        public static extern XtStatus xt_world_layer_unproject(float[] boxToDest, float depthScale, float destX, float destY,
+                                                               float[] originOut, float[] directionOut);
+        [DllImport(Lib, CallingConvention = CallingConvention.Cdecl, EntryPoint = "xt_surface_push_input_ray")]
+        public static extern XtStatus xt_surface_push_input_ray(IntPtr s, ref XtInputEvent e, float[] origin,
+                                                                float[] direction);
 
         // ---- world anchor, perf ----
         [DllImport(Lib, CallingConvention = CallingConvention.Cdecl, EntryPoint = "xt_surface_set_world_anchor")]
