@@ -347,6 +347,98 @@ namespace XTFrame
         public byte _pad1;
     }
 
+    /// <summary>xt_frame_record (T-750 / T-753, 57.2 / 57.5): FrameRecord v1, the runtime's per-frame record. 128 four-byte fields = 512 bytes; struct_size = Marshal.SizeOf&lt;XtFrameRecord&gt;(), set by the caller; the library writes only the fields it covers. causes is [cause][kind] flattened row-major, 11 x 4 = 44 entries, and must be allocated (new uint[44]) before the struct is passed in. Field order and types follow the header one-to-one.</summary>
+    [StructLayout(LayoutKind.Sequential)]
+    internal struct XtFrameRecord
+    {
+        public uint struct_size;
+        public uint version;
+        public uint frame;
+        public uint steady;
+        public float time_s;
+        public uint backend;
+        public uint frame_marked;
+        public float frame_wall_ms;
+        public float frame_cpu_ms;
+        public float unaccounted_ms;
+        public float input_ms;
+        public float input_cpu_ms;
+        public float update_ms;
+        public float update_cpu_ms;
+        public float flow_ms;
+        public float flow_cpu_ms;
+        public float paint_ms;
+        public float paint_cpu_ms;
+        public float damage_ms;
+        public float damage_cpu_ms;
+        public float build_ms;
+        public float build_cpu_ms;
+        public float submit_ms;
+        public float submit_cpu_ms;
+        public float wait_ms;
+        public float wait_cpu_ms;
+        public float update_style_ms;
+        public float update_layout_ms;
+        public float update_animate_ms;
+        public float update_transform_ms;
+        public float submit_plan_ms;
+        public float submit_upload_ms;
+        public float submit_encode_ms;
+        public float submit_queue_ms;
+        public uint styled_elements;
+        public uint laid_out_elements;
+        public uint layout_roots;
+        public uint layout_full_passes;
+        public uint active_animations;
+        public uint active_transitions;
+        public uint anim_evaluated;
+        public uint expr_evaluated;
+        public uint set_style_calls;
+        public uint flow_signals;
+        public uint flow_node_evals;
+        public uint flow_sink_writes;
+        public uint commands;
+        public uint layers;
+        public uint effect_layers;
+        public uint projections;
+        public uint glyphs;
+        public uint path_points;
+        public uint image_draws;
+        public uint culled_offscreen;
+        public uint border_dash_hits;
+        public uint border_dash_misses;
+        public uint bands;
+        public uint band_redraws;
+        public uint passes;
+        public uint draw_calls;
+        public uint pipeline_binds;
+        public uint bind_groups;
+        public uint upload_bytes;
+        public uint transient_creates;
+        public uint frame_reused;
+        public uint effect_cache_hits;
+        public uint effect_cache_misses;
+        public uint coverage_hits;
+        public uint coverage_misses;
+        public float idle_paint_ms;
+        public uint paint_skipped;
+        public uint static_skip_mismatch;
+        public uint partial_layout_mismatch;
+        public uint arena_nodes;
+        public uint command_bytes;
+        public uint effect_cache_bytes;
+        public uint transient_pool_bytes;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 44)]
+        public uint[] causes;
+        public uint redundant_styled;
+        public uint redundant_laid_out;
+        public uint redundant_commands;
+        public uint repainted_unchanged_not_cacheable;
+        public uint repainted_unchanged_key_changed;
+        public uint repainted_unchanged_budget;
+        public uint repainted_unchanged_first_sight;
+    }
+
     /// <summary>xt_rect (device pixels, top-left origin).</summary>
     [StructLayout(LayoutKind.Sequential)]
     internal struct XtRect
@@ -726,6 +818,28 @@ namespace XTFrame
         public static extern void xt_surface_set_perf_enabled(IntPtr s, int enabled);
         [DllImport(Lib, CallingConvention = CallingConvention.Cdecl, EntryPoint = "xt_surface_frame_stats")]
         public static extern XtStatus xt_surface_frame_stats(IntPtr s, out XtFrameStats stats);
+
+        // T-750 / T-753 (57.2, 57.5): FrameRecord, frame marks, thread CPU timing, perf detail, needs-frame. ABI version still 1.
+        // Perf must be on (xt_surface_set_perf_enabled) for the record. CSV functions: buf is a caller-provided UTF-8 buffer of cap bytes
+        // (NUL-terminated, truncated); the return value is the length the whole text needs, like snprintf; buf may be null with cap 0.
+        [DllImport(Lib, CallingConvention = CallingConvention.Cdecl, EntryPoint = "xt_surface_frame_record")]
+        public static extern XtStatus xt_surface_frame_record(IntPtr s, ref XtFrameRecord record);
+        [DllImport(Lib, CallingConvention = CallingConvention.Cdecl, EntryPoint = "xt_frame_record_csv_header")]
+        public static extern UIntPtr xt_frame_record_csv_header(byte[] buf, UIntPtr cap);
+        [DllImport(Lib, CallingConvention = CallingConvention.Cdecl, EntryPoint = "xt_frame_record_csv_row")]
+        public static extern UIntPtr xt_frame_record_csv_row(ref XtFrameRecord record, byte[] buf, UIntPtr cap);
+        [DllImport(Lib, CallingConvention = CallingConvention.Cdecl, EntryPoint = "xt_surface_mark_frame_start")]
+        public static extern XtStatus xt_surface_mark_frame_start(IntPtr s);
+        [DllImport(Lib, CallingConvention = CallingConvention.Cdecl, EntryPoint = "xt_surface_mark_frame_end")]
+        public static extern XtStatus xt_surface_mark_frame_end(IntPtr s);
+        [DllImport(Lib, CallingConvention = CallingConvention.Cdecl, EntryPoint = "xt_surface_set_thread_cpu_timing")]
+        public static extern XtStatus xt_surface_set_thread_cpu_timing(IntPtr s, int enabled);
+        /// <param name="level">0 (default), 1 or 2; anything else is InvalidArgument.</param>
+        [DllImport(Lib, CallingConvention = CallingConvention.Cdecl, EntryPoint = "xt_surface_set_perf_detail")]
+        public static extern XtStatus xt_surface_set_perf_detail(IntPtr s, int level);
+        /// <param name="needsFrame">0: nothing would change, the host may skip update and render; 1: it has to update and render.</param>
+        [DllImport(Lib, CallingConvention = CallingConvention.Cdecl, EntryPoint = "xt_surface_needs_frame")]
+        public static extern XtStatus xt_surface_needs_frame(IntPtr s, out int needsFrame);
 
         // ---- helpers ----
 

@@ -2,6 +2,20 @@
 
 All notable changes to `com.xtframe.runtime` are documented here.
 
+## [0.6.0] - 2026-11-20
+
+### Changed
+- The native library is now built from XTFrame-Backends `v0.19.0` (`backends/runtime/` =
+  XTFrame-Runtime `v0.19.0`). Re-fetch the submodules (`git submodule sync --recursive`, then
+  `git submodule update --init --recursive`) and rebuild as described for 0.4.0.
+
+### Added
+- `XtNative` declarations for the XTFrame 0.19 measurement and idle C ABI additions (ABI version
+  still 1, T-749, T-750, T-753): `xt_surface_frame_record` with `XtFrameRecord` (`xt_frame_record`,
+  128 four-byte fields, 512 bytes), `xt_frame_record_csv_header`, `xt_frame_record_csv_row`,
+  `xt_surface_mark_frame_start`, `xt_surface_mark_frame_end`, `xt_surface_set_thread_cpu_timing`,
+  `xt_surface_set_perf_detail`, `xt_surface_needs_frame`. No high-level C# API yet.
+
 ## [0.5.0] - 2026-11-18
 
 ### Changed
