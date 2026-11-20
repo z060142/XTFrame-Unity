@@ -59,6 +59,7 @@ Up to 0.3.7 the submodule was `runtime/` (XTFrame-Runtime); from 0.4.0 it is `ba
 | 0.4.0 | XTFrame-Backends `v0.17.0` (`backends/runtime/` = XTFrame-Runtime `v0.17.0`; GPU target memory: xt_gpu_target_set_image_budget / trim / memory_stats, image preload: xt_gpu_target_preload_ui / preload_image; sample_count 0 now means 1x) | `XT_CAPI_ABI_VERSION` 1 |
 | 0.5.0 | XTFrame-Backends `v0.18.0` (`backends/runtime/` = XTFrame-Runtime `v0.18.0`; world layers: xt_surface_set_world_layers / set_world_layer_density / render_layers_gpu / world_layer_count / world_layer_info / world_layer_readback / draw_layers_gpu, xt_world_layer_orbit_matrix / unproject, xt_surface_push_input_ray) | `XT_CAPI_ABI_VERSION` 1 |
 | 0.6.0 | XTFrame-Backends `v0.19.0` (`backends/runtime/` = XTFrame-Runtime `v0.19.0`; measurement and idle: xt_surface_frame_record with xt_frame_record, xt_frame_record_csv_header / csv_row, xt_surface_mark_frame_start / mark_frame_end, xt_surface_set_thread_cpu_timing, xt_surface_set_perf_detail, xt_surface_needs_frame) | `XT_CAPI_ABI_VERSION` 1 |
+| 0.6.1 | XTFrame-Backends `v0.19.1` (`backends/runtime/` = XTFrame-Runtime `v0.19.1`; runtime update only, no C ABI change) | `XT_CAPI_ABI_VERSION` 1 |
 
 ### Upgrading to 0.4.0
 

@@ -2,6 +2,20 @@
 
 All notable changes to `com.xtframe.runtime` are documented here.
 
+## [0.6.1] - 2026-11-21
+
+### Changed
+- The native library is now built from XTFrame-Backends `v0.19.1` (`backends/runtime/` =
+  XTFrame-Runtime `v0.19.1`). Re-fetch the submodules (`git submodule sync --recursive`, then
+  `git submodule update --init --recursive`) and rebuild as described for 0.4.0. This is a runtime
+  update only: no C ABI addition (ABI version still 1) and no change to `XtNative`.
+- Behaviour changes that a host feels:
+  - `ui-scale: none` is factor 1 and `uiscaleDpiFloor` is no longer multiplied by the device pixel
+    ratio; a host whose screen has a device pixel ratio other than 1 sees its UI scale change
+    (nothing changes at 1).
+  - An SVG gradient's first stop opacity no longer affects the whole gradient.
+  - Custom effects gain the `XtInput.local` and `boxSize` inputs.
+
 ## [0.6.0] - 2026-11-20
 
 ### Changed
