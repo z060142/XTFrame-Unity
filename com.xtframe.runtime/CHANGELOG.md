@@ -2,6 +2,24 @@
 
 All notable changes to `com.xtframe.runtime` are documented here.
 
+## [0.6.2] - 2026-11-21
+
+### Changed
+- The native library is now built from XTFrame-Backends `v0.19.2` (`backends/runtime/` =
+  XTFrame-Runtime `v0.19.2`). Re-fetch the submodules (`git submodule sync --recursive`, then
+  `git submodule update --init --recursive`) and rebuild as described for 0.4.0. This is a runtime
+  update only: no C ABI addition (ABI version still 1) and no change to `XtNative`.
+- Behaviour changes that a host feels (the first two are decided when a UI is compiled, so the picture
+  changes after the UI is recompiled with the new tools):
+  - SVG gradients: a linear gradient under a skew, a non-uniform scale not aligned with the gradient,
+    or a diagonal `objectBoundingBox` gradient on a non-square shape draws slanted stripes as
+    browsers do; with `objectBoundingBox` and a `gradientTransform`, the transform is applied in the
+    box's unit space and then the box (it was the box first).
+  - `@keyframes` that differ in `custom()` effect parameters now animate them (they compiled to no
+    track before).
+  - Custom effects on a scene node (a shape, path or group inside an `<svg>`) read `XtInput.local`
+    and `XtInput.boxSize` from the node's geometry box (they read 0 before); elements are unchanged.
+
 ## [0.6.1] - 2026-11-21
 
 ### Changed
