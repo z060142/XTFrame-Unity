@@ -61,6 +61,7 @@ Up to 0.3.7 the submodule was `runtime/` (XTFrame-Runtime); from 0.4.0 it is `ba
 | 0.6.0 | XTFrame-Backends `v0.19.0` (`backends/runtime/` = XTFrame-Runtime `v0.19.0`; measurement and idle: xt_surface_frame_record with xt_frame_record, xt_frame_record_csv_header / csv_row, xt_surface_mark_frame_start / mark_frame_end, xt_surface_set_thread_cpu_timing, xt_surface_set_perf_detail, xt_surface_needs_frame) | `XT_CAPI_ABI_VERSION` 1 |
 | 0.6.1 | XTFrame-Backends `v0.19.1` (`backends/runtime/` = XTFrame-Runtime `v0.19.1`; runtime update only, no C ABI change) | `XT_CAPI_ABI_VERSION` 1 |
 | 0.6.2 | XTFrame-Backends `v0.19.2` (`backends/runtime/` = XTFrame-Runtime `v0.19.2`; runtime update only, no C ABI change) | `XT_CAPI_ABI_VERSION` 1 |
+| 0.6.3 | XTFrame-Backends `v0.19.3` (`backends/runtime/` = XTFrame-Runtime `v0.19.3`; runtime update only, no C ABI change) | `XT_CAPI_ABI_VERSION` 1 |
 
 ### Upgrading to 0.4.0
 

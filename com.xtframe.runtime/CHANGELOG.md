@@ -2,6 +2,31 @@
 
 All notable changes to `com.xtframe.runtime` are documented here.
 
+## [0.6.3] - 2026-11-22
+
+### Changed
+- The native library is now built from XTFrame-Backends `v0.19.3` (`backends/runtime/` =
+  XTFrame-Runtime `v0.19.3`). Re-fetch the submodules (`git submodule sync --recursive`, then
+  `git submodule update --init --recursive`) and rebuild as described for 0.4.0. This is a runtime
+  update only: no C ABI addition (ABI version still 1) and no change to `XtNative`.
+- Behaviour changes that a host feels:
+  - Fonts: within a family the face is chosen by width first (the request is normal width), then
+    italic, then weight. Families whose typographic family also holds narrow or condensed faces
+    (`"Arial"`, `"Myriad Pro"`, `"Bodoni MT"`, `"Goudy Old Style"`, `"Minion Pro"`) now draw their
+    normal-width face instead of a narrow one, so the same text gets wider (`"Arial"` 264 -> 322 px).
+    Legacy per-style family names (`"Arial Narrow"`, `"Segoe UI Semibold"`, `"Sitka Text"`) match when
+    no face has that typographic family, instead of falling back. `font-stretch` is still not supported.
+  - Software renderer: bilinear and trilinear image filtering run on premultiplied texels, as the GPU
+    backends filter their textures, so a translucent image edge no longer picks up the colour of
+    neighbouring transparent texels. Point sampling and opaque images are unchanged. The SW cache keeps
+    a premultiplied level 0 per non-BC image (w x h x 4 more bytes).
+  - Runtime: the values of `draggable`, `drop-target`, `autofocus`, `focus-trap` and `key-activation`
+    are trimmed of surrounding white space before they are read (`draggable=" false "` is no longer a
+    drag source). `Document::appendChild` / `insertBefore` with a pooled `<repeat>` instance as parent
+    or child do nothing (a pooled row attached elsewhere crashed on reuse).
+  - Bundle writes on Windows: `writeFile()` and the final move of `zipDirectory()` retry for up to
+    about 0.25 s when another process briefly holds the target, then fail as before.
+
 ## [0.6.2] - 2026-11-21
 
 ### Changed
