@@ -2,6 +2,43 @@
 
 All notable changes to `com.xtframe.runtime` are documented here.
 
+## [0.7.0] - 2026-11-25
+
+### Added
+- `XtNative` declarations for the input channels of XTFrame 0.20.0 (C ABI appended, ABI version
+  still 1): `xt_input_channel(string nameUtf8) -> uint` (the process-wide id of a channel name, 0 for
+  a null or malformed name), `xt_surface_push_channel(IntPtr s, uint channel, float value,
+  float strength, uint flags, uint player) -> XtStatus` and `xt_surface_channel_value(IntPtr s,
+  uint channel, uint player) -> float`, plus the constants `XT_CHANNEL_RELATIVE` (1) and
+  `XT_CHANNEL_BUTTON` (2). Declarations only: the existing input forwarding is unchanged and nothing
+  feeds channels from Unity input yet.
+
+### Changed
+- The native library is now built from XTFrame-Backends `v0.20.0` (`backends/runtime/` =
+  XTFrame-Runtime `v0.20.0`). Re-fetch the submodules (`git submodule sync --recursive`, then
+  `git submodule update --init --recursive`) and rebuild as described for 0.4.0.
+- Bundles have to be rebuilt with the 0.20.0 tools: the IR format goes from 3.3 to 3.5.
+- Behaviour changes that a host feels:
+  - Clock: the runtime clock, document clocks, animation start clocks and paused positions are kept
+    in double (a 2 s animation's phase error at 3600.5 s drops from 0.795 s to under 1 us). The C ABI
+    signatures are unchanged. `xtTime` is the clock modulo 3600 s, so it wraps to 0 once an hour. A
+    document loaded late starts from the current clock instead of jumping its first-frame timelines
+    through the whole clock, and `<anim autoplay>` starts at the load clock.
+  - The flow `clock` node and `#document.clock` accumulate in double (each tick adds the float `dt`,
+    widened, to a double sum; it was a float sum). `timer` and `throttle` are unchanged.
+  - CSS animations: a finite `animation-iteration-count` above 1 repeats (it played once) and a
+    finite `alternate` runs back; `reverse` / `alternate-reverse` with a finite count keep the delay,
+    end on the last pass's end and finish; `reverse infinite` is reversed. A fractional count is
+    still truncated. `@timeline` play modes are unchanged.
+  - `@keyframes` without `from`, `to` or both: the missing end interpolates toward the property's
+    current value, as CSS does (the element froze at the start value). A CSS animation that ends
+    without a `forwards` fill puts opacity and the transform components back to their cascade values.
+  - uiscale != 1: px grid tracks are scaled like other px lengths, an element under a world anchor
+    lands exactly on the given screen point, and spawned instances and virtualized `<repeat>` spacers
+    are no longer scaled twice. At uiscale 1 nothing changes.
+  - Gamepad: the right stick and both triggers now reach `pad.rx|ry|lt|rt`; navigation, focus and
+    scrolling are unchanged.
+
 ## [0.6.3] - 2026-11-22
 
 ### Changed

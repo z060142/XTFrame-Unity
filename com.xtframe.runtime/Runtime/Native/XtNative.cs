@@ -841,6 +841,20 @@ namespace XTFrame
         [DllImport(Lib, CallingConvention = CallingConvention.Cdecl, EntryPoint = "xt_surface_needs_frame")]
         public static extern XtStatus xt_surface_needs_frame(IntPtr s, out int needsFrame);
 
+        // T-873 (60.2, 60.5): input channels, named quantities the UI reads by name. Appended, ABI version still 1.
+        // xt_input_channel: the process-wide id of a channel name (pad.*, key.*, wheel.*, pointer.*, midi.*, host.<name>,
+        // action:<name>); 0 for a null or malformed name. push_channel: flags give the kind of a channel whose name does
+        // not fix it (host.*, action:*, midi.cc(n)); player 0..7. channel_value: the value as of the last update.
+        public const uint XT_CHANNEL_RELATIVE = 1; // XT_CHANNEL_RELATIVE
+        public const uint XT_CHANNEL_BUTTON = 2; // XT_CHANNEL_BUTTON
+        [DllImport(Lib, CallingConvention = CallingConvention.Cdecl, EntryPoint = "xt_input_channel")]
+        public static extern uint xt_input_channel([MarshalAs(UnmanagedType.LPUTF8Str)] string nameUtf8);
+        [DllImport(Lib, CallingConvention = CallingConvention.Cdecl, EntryPoint = "xt_surface_push_channel")]
+        public static extern XtStatus xt_surface_push_channel(IntPtr s, uint channel, float value, float strength, uint flags,
+                                                              uint player);
+        [DllImport(Lib, CallingConvention = CallingConvention.Cdecl, EntryPoint = "xt_surface_channel_value")]
+        public static extern float xt_surface_channel_value(IntPtr s, uint channel, uint player);
+
         // ---- helpers ----
 
         /// <summary>Copies a native UTF-8 string at once; NULL becomes "".</summary>

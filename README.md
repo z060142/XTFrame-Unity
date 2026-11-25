@@ -62,6 +62,7 @@ Up to 0.3.7 the submodule was `runtime/` (XTFrame-Runtime); from 0.4.0 it is `ba
 | 0.6.1 | XTFrame-Backends `v0.19.1` (`backends/runtime/` = XTFrame-Runtime `v0.19.1`; runtime update only, no C ABI change) | `XT_CAPI_ABI_VERSION` 1 |
 | 0.6.2 | XTFrame-Backends `v0.19.2` (`backends/runtime/` = XTFrame-Runtime `v0.19.2`; runtime update only, no C ABI change) | `XT_CAPI_ABI_VERSION` 1 |
 | 0.6.3 | XTFrame-Backends `v0.19.3` (`backends/runtime/` = XTFrame-Runtime `v0.19.3`; runtime update only, no C ABI change) | `XT_CAPI_ABI_VERSION` 1 |
+| 0.7.0 | XTFrame-Backends `v0.20.0` (`backends/runtime/` = XTFrame-Runtime `v0.20.0`; input channels: xt_input_channel, xt_surface_push_channel, xt_surface_channel_value, XT_CHANNEL_RELATIVE / XT_CHANNEL_BUTTON; bundles need the 0.20.0 tools, IR 3.5) | `XT_CAPI_ABI_VERSION` 1 |
 
 ### Upgrading to 0.4.0
 
