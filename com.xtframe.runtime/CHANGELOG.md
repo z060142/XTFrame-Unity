@@ -2,6 +2,15 @@
 
 All notable changes to `com.xtframe.runtime` are documented here.
 
+## [0.7.1] - 2026-11-26
+
+### Changed
+- The native library is now built from XTFrame-Backends `v0.21.0` (`backends/runtime/` =
+  XTFrame-Runtime `v0.21.0`). Re-fetch the submodules (`git submodule sync --recursive`, then
+  `git submodule update --init --recursive`) and rebuild `xt_capi`.
+- No C ABI change (`XT_CAPI_ABI_VERSION` 1, `xtframe.h` unchanged since 0.20.0) and no format change
+  (IR 3.5): `XtNative` is unchanged and existing bundles keep working.
+
 ## [0.7.0] - 2026-11-25
 
 ### Added
